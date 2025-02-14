@@ -9,7 +9,7 @@ public class PollResultDTO {
     private Map<String, Long> results;
     private int totalVotes;
 
-    public PollResultDTO(String pollName, Map<String, Integer> results, int totalVotes) {
+    public PollResultDTO(String pollName, Map<String, Long> results, int totalVotes) {
         this.pollName = pollName;
         this.results = results;
         this.totalVotes = totalVotes;
@@ -23,11 +23,11 @@ public class PollResultDTO {
         this.pollName = pollName;
     }
 
-    public Map<String, Integer> getResults() {
+    public Map<String, Long> getResults() {
         return results;
     }
 
-    public void setResults(Map<String, Integer> results) {
+    public void setResults(Map<String, Long> results) {
         this.results = results;
     }
 
