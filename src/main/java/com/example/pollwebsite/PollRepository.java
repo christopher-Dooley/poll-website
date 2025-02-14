@@ -10,4 +10,6 @@ public interface PollRepository extends CrudRepository<PollEntity, UUID> {
     PollEntity findByName(String name);
 
     PollEntity findByUUID(UUID uuid);
+
+    PollEntity findByCurrent(boolean current);
 }

@@ -16,15 +16,17 @@ public class PollEntity {
     private String question;
     private Collection<String> options;
     private int numberOfVotes;
+    private boolean current;
 
     protected PollEntity() {}
 
-    public PollEntity(UUID uuid, String name, String question, Collection<String> options, int numberOfVotes) {
+    public PollEntity(UUID uuid, String name, String question, Collection<String> options, int numberOfVotes, boolean current) {
         this.uuid = uuid;
         this.name = name;
         this.question = question;
         this.options = options;
         this.numberOfVotes = numberOfVotes;
+        this.current = current;
     }
 
     public UUID getUuid() {
@@ -67,16 +69,24 @@ public class PollEntity {
         this.numberOfVotes = numberOfVotes;
     }
 
+    public boolean isCurrent() {
+        return current;
+    }
+
+    public void setCurrent(boolean current) {
+        this.current = current;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         PollEntity that = (PollEntity) o;
-        return numberOfVotes == that.numberOfVotes && Objects.equals(uuid, that.uuid) && Objects.equals(name, that.name) && Objects.equals(question, that.question) && Objects.equals(options, that.options);
+        return numberOfVotes == that.numberOfVotes && current == that.current && Objects.equals(uuid, that.uuid) && Objects.equals(name, that.name) && Objects.equals(question, that.question) && Objects.equals(options, that.options);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(uuid, name, question, options, numberOfVotes);
+        return Objects.hash(uuid, name, question, options, numberOfVotes, current);
     }
 
     @Override
@@ -87,6 +97,9 @@ public class PollEntity {
                 ", question='" + question + '\'' +
                 ", options=" + options +
                 ", numberOfVotes=" + numberOfVotes +
+                ", current=" + current +
                 '}';
     }
+
+    
 }

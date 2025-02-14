@@ -11,13 +11,15 @@ public class PollDTO {
     private String question;
     private Collection<String> options;
     private int numberOfVotes;
+    private boolean current;
 
-    public PollDTO(UUID uuid, String name, String question, Collection<String> options, int numberOfVotes) {
+    public PollDTO(UUID uuid, String name, String question, Collection<String> options, int numberOfVotes, boolean current) {
         this.uuid = uuid;
         this.name = name;
         this.question = question;
         this.options = options;
         this.numberOfVotes = numberOfVotes;
+        this.current = current;
     }
 
     public UUID getUuid() {
@@ -60,16 +62,24 @@ public class PollDTO {
         this.numberOfVotes = numberOfVotes;
     }
 
+    public boolean isCurrent() {
+        return current;
+    }
+
+    public void setCurrent(boolean current) {
+        this.current = current;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         PollDTO pollDTO = (PollDTO) o;
-        return numberOfVotes == pollDTO.numberOfVotes && Objects.equals(uuid, pollDTO.uuid) && Objects.equals(name, pollDTO.name) && Objects.equals(question, pollDTO.question) && Objects.equals(options, pollDTO.options);
+        return numberOfVotes == pollDTO.numberOfVotes && current == pollDTO.current && Objects.equals(uuid, pollDTO.uuid) && Objects.equals(name, pollDTO.name) && Objects.equals(question, pollDTO.question) && Objects.equals(options, pollDTO.options);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(uuid, name, question, options, numberOfVotes);
+        return Objects.hash(uuid, name, question, options, numberOfVotes, current);
     }
 
     @Override
@@ -80,6 +90,7 @@ public class PollDTO {
                 ", question='" + question + '\'' +
                 ", options=" + options +
                 ", numberOfVotes=" + numberOfVotes +
+                ", current=" + current +
                 '}';
     }
 }
