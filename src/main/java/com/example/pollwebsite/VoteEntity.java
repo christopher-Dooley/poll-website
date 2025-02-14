@@ -15,16 +15,16 @@ public class VoteEntity {
     private String pollName;
     private String option;
     private Integer voteNumber;
-    private ZonedDateTime time;
+    private ZonedDateTime timestamp;
 
     protected VoteEntity() {}
 
-    public VoteEntity(String pollName, String option, Integer voteNumber, ZonedDateTime time) {
+    public VoteEntity(String pollName, String option, Integer voteNumber, ZonedDateTime timestamp) {
         this.uuid = UUID.randomUUID();
         this.pollName = pollName;
         this.option = option;
         this.voteNumber = voteNumber;
-        this.time = time;
+        this.timestamp = timestamp;
     }
 
     public UUID getUuid() {
@@ -59,24 +59,24 @@ public class VoteEntity {
         this.voteNumber = voteNumber;
     }
 
-    public ZonedDateTime getTime() {
-        return time;
+    public ZonedDateTime getTimestamp() {
+        return timestamp;
     }
 
-    public void setTime(ZonedDateTime time) {
-        this.time = time;
+    public void setTimestamp(ZonedDateTime timestamp) {
+        this.timestamp = timestamp;
     }
 
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         VoteEntity that = (VoteEntity) o;
-        return Objects.equals(uuid, that.uuid) && Objects.equals(pollName, that.pollName) && Objects.equals(option, that.option) && Objects.equals(voteNumber, that.voteNumber) && Objects.equals(time, that.time);
+        return Objects.equals(uuid, that.uuid) && Objects.equals(pollName, that.pollName) && Objects.equals(option, that.option) && Objects.equals(voteNumber, that.voteNumber) && Objects.equals(timestamp, that.timestamp);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(uuid, pollName, option, voteNumber, time);
+        return Objects.hash(uuid, pollName, option, voteNumber, timestamp);
     }
 
     @Override
@@ -86,7 +86,7 @@ public class VoteEntity {
                 ", pollName='" + pollName + '\'' +
                 ", option='" + option + '\'' +
                 ", voteNumber=" + voteNumber +
-                ", time=" + time +
+                ", time=" + timestamp +
                 '}';
     }
 }
