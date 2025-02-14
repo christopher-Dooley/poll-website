@@ -19,11 +19,12 @@ public class PollEntity {
 
     protected PollEntity() {}
 
-    public PollEntity(UUID uuid, String name, String question, Collection<String> options) {
+    public PollEntity(UUID uuid, String name, String question, Collection<String> options, int numberOfVotes) {
         this.uuid = uuid;
         this.name = name;
         this.question = question;
         this.options = options;
+        this.numberOfVotes = numberOfVotes;
     }
 
     public UUID getUuid() {
