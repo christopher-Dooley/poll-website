@@ -8,7 +8,8 @@ public class DataTransformer {
                 dto.getName(), 
                 dto.getQuestion(),
                 dto.getOptions(), 
-                dto.getNumberOfVotes());
+                dto.getNumberOfVotes(),
+                dto.isCurrent());
     }
 
     public static PollDTO pollEntityToDTO(PollEntity entity) {
@@ -17,7 +18,8 @@ public class DataTransformer {
                 entity.getName(), 
                 entity.getQuestion(), 
                 entity.getOptions(), 
-                entity.getNumberOfVotes());
+                entity.getNumberOfVotes(),
+                entity.isCurrent());
     }
 
     public static VoteEntity voteDTOToEntity(VoteDTO dto) {
