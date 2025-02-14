@@ -19,8 +19,8 @@ public class VoteEntity {
 
     protected VoteEntity() {}
 
-    public VoteEntity(String pollName, String option, Integer voteNumber, ZonedDateTime timestamp) {
-        this.uuid = UUID.randomUUID();
+    public VoteEntity(UUID uuid, String pollName, String option, Integer voteNumber, ZonedDateTime timestamp) {
+        this.uuid = uuid;
         this.pollName = pollName;
         this.option = option;
         this.voteNumber = voteNumber;

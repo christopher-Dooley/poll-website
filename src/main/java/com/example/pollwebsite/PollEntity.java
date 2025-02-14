@@ -19,8 +19,8 @@ public class PollEntity {
 
     protected PollEntity() {}
 
-    public PollEntity(String name, String question, Collection<String> options) {
-        this.uuid = UUID.randomUUID();
+    public PollEntity(UUID uuid, String name, String question, Collection<String> options) {
+        this.uuid = uuid;
         this.name = name;
         this.question = question;
         this.options = options;
