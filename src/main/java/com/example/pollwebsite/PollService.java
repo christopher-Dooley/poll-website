@@ -78,7 +78,7 @@ public class PollService {
         } else {
             String message = String.format("Poll %s not found", voteDTO.getPollName());
             log.error(message);
-            throw new RuntimeException(message);
+            throw new PollNotFoundException(message);
         }
     }
 
@@ -100,7 +100,7 @@ public class PollService {
         if (poll == null) {
             String message = "No current poll found";
             log.error(message);
-            throw new RuntimeException(message);
+            throw new PollNotFoundException(message);
         }
 
         return createPollResultDTO(poll);
@@ -112,7 +112,7 @@ public class PollService {
         if (poll == null) {
             String message = String.format("Poll %s not found", pollName);
             log.error(message);
-            throw new RuntimeException(message);
+            throw new PollNotFoundException(message);
         }
 
         return createPollResultDTO(poll);
@@ -124,7 +124,7 @@ public class PollService {
         if (poll == null) {
             String message = String.format("Poll %s not found", uuid);
             log.error(message);
-            throw new RuntimeException(message);
+            throw new PollNotFoundException(message);
         }
 
         return createPollResultDTO(poll);
