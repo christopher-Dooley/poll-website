@@ -6,7 +6,7 @@ import java.util.Objects;
 public class PollResultDTO {
 
     private String pollName;
-    private Map<String, Integer> results;
+    private Map<String, Long> results;
     private int totalVotes;
 
     public PollResultDTO(String pollName, Map<String, Integer> results, int totalVotes) {
