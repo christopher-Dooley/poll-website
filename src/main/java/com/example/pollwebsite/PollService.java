@@ -86,6 +86,14 @@ public class PollService {
         return pollEntityToDTO(pollRepository.findByCurrent(true));
     }
 
+    public PollDTO getPollByName(String name) {
+        return pollEntityToDTO(pollRepository.findByName(name));
+    }
+
+    public PollDTO getPollByUUID(UUID uuid) {
+        return pollEntityToDTO(pollRepository.findByUUID(uuid));
+    }
+
     public PollResultDTO getResultsForCurrentPoll() {
         PollEntity poll = pollRepository.findByCurrent(true);
 
