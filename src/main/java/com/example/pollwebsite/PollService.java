@@ -118,6 +118,18 @@ public class PollService {
         return createPollResultDTO(poll);
     }
 
+    public PollResultDTO getResultsForPollByUUID(UUID uuid) {
+        PollEntity poll = pollRepository.findByUUID(uuid);
+
+        if (poll == null) {
+            String message = String.format("Poll %s not found", uuid);
+            log.error(message);
+            throw new RuntimeException(message);
+        }
+
+        return createPollResultDTO(poll);
+    }
+
     private PollResultDTO createPollResultDTO(PollEntity poll) {
         List<VoteEntity> votesForPoll = voteRepository.findByPollName(poll.getName());
         Map<String, Long> votesByOption = votesForPoll.stream().collect(Collectors.groupingBy(VoteEntity::getOption, Collectors.counting()));
