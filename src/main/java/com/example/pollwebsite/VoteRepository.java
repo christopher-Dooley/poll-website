@@ -1,16 +1,18 @@
 package com.example.pollwebsite;
 
-import org.springframework.data.repository.ListCrudRepository;
+import org.springframework.data.repository.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
-public interface VoteRepository extends ListCrudRepository<VoteEntity, UUID> {
+public interface VoteRepository extends Repository<VoteEntity, UUID> {
     VoteEntity save(VoteEntity voteEntity);
 
-    VoteEntity findByUUID(UUID uuid);
+    //TODO wrap in optional
+    Optional<VoteEntity> findById(UUID uuid);
 
-    VoteEntity findByPollNameAndVoteNumber(String pollName, int voteNumber);
+    Optional<VoteEntity> findByPollNameAndVoteNumber(String pollName, int voteNumber);
 
     List<VoteEntity> findByPollName(String pollName);
 }

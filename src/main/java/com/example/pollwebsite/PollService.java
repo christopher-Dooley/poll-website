@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -103,7 +102,7 @@ public class PollService {
     }
 
     public PollDTO getPollByUUID(UUID uuid) {
-        return pollEntityToDTO(pollRepository.findByID(uuid)
+        return pollEntityToDTO(pollRepository.findById(uuid)
                 .orElseThrow(() -> new PollNotFoundException(String.format("Poll %s not found", uuid))));
     }
 
@@ -129,11 +128,11 @@ public class PollService {
     }
 
     public PollResultDTO getResultsForPollByUUID(UUID uuid) {
-        PollEntity poll = pollRepository.findByID(uuid)
+        PollEntity poll = pollRepository.findById(uuid)
                 .orElseThrow(() -> {
                     String message = String.format("Poll %s not found", uuid);
                     log.error(message);
-                    return new PollNotFoundException(String.format("Poll %s not found", uuid));
+                    return new PollNotFoundException(message);
                 });
 
         return createPollResultDTO(poll);
@@ -147,11 +146,20 @@ public class PollService {
     }
 
     public VoteDTO getVoteForPoll(String pollName, int voteNumber) {
-        return voteEntityToDTO(voteRepository.findByPollNameAndVoteNumber(pollName, voteNumber));
+        return voteEntityToDTO(voteRepository.findByPollNameAndVoteNumber(pollName, voteNumber)
+                .orElseThrow(() -> {
+            String message = String.format("Vote %s for poll %s not found", voteNumber, pollName);
+            log.error(message);
+            return new VoteNotFoundException(message);
+        }));
     }
 
     public VoteDTO getVoteForUUID(UUID uuid) {
-        return voteEntityToDTO(voteRepository.findByUUID(uuid));
+        return voteEntityToDTO(voteRepository.findById(uuid).orElseThrow(() -> {
+            String message = String.format("Vote %s not found", uuid);
+            log.error(message);
+            return new VoteNotFoundException(message);
+        }));
     }
 
 }
