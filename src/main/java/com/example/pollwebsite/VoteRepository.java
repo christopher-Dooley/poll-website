@@ -9,7 +9,6 @@ import java.util.UUID;
 public interface VoteRepository extends Repository<VoteEntity, UUID> {
     VoteEntity save(VoteEntity voteEntity);
 
-    //TODO wrap in optional
     Optional<VoteEntity> findById(UUID uuid);
 
     Optional<VoteEntity> findByPollNameAndVoteNumber(String pollName, int voteNumber);
