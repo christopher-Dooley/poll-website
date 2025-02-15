@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -51,11 +52,11 @@ public class PollService {
     }
 
     private void setNewPollAsCurrent(PollDTO pollDTO) {
-        PollEntity lastPoll = pollRepository.findByCurrent(true);
-        if (lastPoll != null) {
-            lastPoll.setCurrent(false);
-            pollRepository.save(lastPoll);
-        }
+        pollRepository.findByCurrent(true).ifPresent((pollEntity) -> {
+            pollEntity.setCurrent(false);
+            pollRepository.save(pollEntity);
+        });
+
         pollDTO.setCurrent(true);
     }
 
@@ -71,63 +72,69 @@ public class PollService {
     }
 
     private void updateVoteCount(VoteDTO voteDTO) {
-        PollEntity poll = pollRepository.findByName(voteDTO.getPollName());
-        if (poll != null) {
-            int newNumberOfVotes = poll.getNumberOfVotes() + 1;
-            poll.setNumberOfVotes(newNumberOfVotes);
-            voteDTO.setVoteNumber(newNumberOfVotes);
-            pollRepository.save(poll);
-        } else {
-            String message = String.format("Poll %s not found", voteDTO.getPollName());
+        String pollName = voteDTO.getPollName();
+        PollEntity poll = pollRepository.findByName(pollName).orElseThrow(() -> {
+            String message = String.format("Poll %s not found", pollName);
             log.error(message);
-            throw new PollNotFoundException(message);
-        }
+            return new PollNotFoundException(message);
+        });
+
+        int newNumberOfVotes = poll.getNumberOfVotes() + 1;
+        poll.setNumberOfVotes(newNumberOfVotes);
+        voteDTO.setVoteNumber(newNumberOfVotes);
+        pollRepository.save(poll);
     }
 
     public PollDTO getCurrentPoll() {
-        return pollEntityToDTO(pollRepository.findByCurrent(true));
+        return pollEntityToDTO(pollRepository.findByCurrent(true).orElseThrow(() -> {
+            String message = "Current poll not found";
+            log.error(message);
+            return new PollNotFoundException(message);
+        }));
     }
 
     public PollDTO getPollByName(String name) {
-        return pollEntityToDTO(pollRepository.findByName(name));
+        return pollEntityToDTO(pollRepository.findByName(name)
+                .orElseThrow(() -> {
+                    String message = String.format("Poll %s not found", name);
+                    log.error(message);
+                    return new PollNotFoundException(message);
+                }));
     }
 
     public PollDTO getPollByUUID(UUID uuid) {
-        return pollEntityToDTO(pollRepository.findByUUID(uuid));
+        return pollEntityToDTO(pollRepository.findByID(uuid)
+                .orElseThrow(() -> new PollNotFoundException(String.format("Poll %s not found", uuid))));
     }
 
     public PollResultDTO getResultsForCurrentPoll() {
-        PollEntity poll = pollRepository.findByCurrent(true);
-
-        if (poll == null) {
-            String message = "No current poll found";
+        PollEntity poll = pollRepository.findByCurrent(true).orElseThrow(() -> {
+            String message = "Current poll not found";
             log.error(message);
-            throw new PollNotFoundException(message);
-        }
+            return new PollNotFoundException(message);
+        });
 
         return createPollResultDTO(poll);
     }
 
     public PollResultDTO getResultsForPoll(String pollName) {
-        PollEntity poll = pollRepository.findByName(pollName);
-
-        if (poll == null) {
-            String message = String.format("Poll %s not found", pollName);
-            log.error(message);
-            throw new PollNotFoundException(message);
-        }
+        PollEntity poll = pollRepository.findByName(pollName)
+                .orElseThrow(() -> {
+                    String message = String.format("Poll %s not found", pollName);
+                    log.error(message);
+                    return new PollNotFoundException(message);
+                });
 
         return createPollResultDTO(poll);
     }
 
     public PollResultDTO getResultsForPollByUUID(UUID uuid) {
-        PollEntity poll = pollRepository.findByUUID(uuid);
-
-        if (poll == null) {
-            String message = String.format("Poll %s not found", uuid);
-            log.error(message);
-            throw new PollNotFoundException(message);
-        }
+        PollEntity poll = pollRepository.findByID(uuid)
+                .orElseThrow(() -> {
+                    String message = String.format("Poll %s not found", uuid);
+                    log.error(message);
+                    return new PollNotFoundException(String.format("Poll %s not found", uuid));
+                });
 
         return createPollResultDTO(poll);
     }
