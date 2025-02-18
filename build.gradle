@@ -24,6 +24,39 @@ dependencies {
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
+def frontendProjectDir = file("frontend\\poll-frontend")
+def frontendDistDir = file("frontend\\poll-frontend\\dist")
+
+// Task to run npm install
+tasks.register('npmInstall', Exec) {
+	workingDir frontendProjectDir
+	inputs.file("${frontendProjectDir}\\package.json")
+	outputs.dir("${frontendProjectDir}\\node_modules")
+
+	commandLine 'cmd.exe', '/c', 'npm install'
+}
+
+// Task to build the UI
+tasks.register('buildFrontend', Exec) {
+	workingDir frontendProjectDir
+	inputs.dir("${frontendProjectDir}\\src")
+	inputs.dir("${frontendProjectDir}\\node_modules")
+	outputs.dir(frontendDistDir)
+	dependsOn npmInstall
+
+	commandLine 'cmd.exe', '/c', 'npm run build'
+}
+
+// Task to copy UI build artifacts to resources
+tasks.register('copyFrontendBuild', Copy) {
+	dependsOn buildFrontend
+	from frontendDistDir
+	into "src\\main\\resources\\static"
+}
+
+// Make sure the UI is built and copied before processing resources
+processResources.dependsOn copyFrontendBuild
+
 tasks.named('test') {
 	useJUnitPlatform()
 }
