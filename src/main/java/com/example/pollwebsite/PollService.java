@@ -38,6 +38,10 @@ public class PollService {
         }
     }
 
+    public boolean isPollLengthValid(PollDTO pollDTO) {
+        return pollDTO.getOptions().size() >= 2 && pollDTO.getOptions().size() <= 7;
+    }
+
     private void setPollUuidIfNull(PollDTO dto) {
         if (dto.getUuid() == null) {
             dto.setUuid(UUID.randomUUID());

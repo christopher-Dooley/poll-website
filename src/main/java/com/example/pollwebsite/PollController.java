@@ -37,6 +37,10 @@ public class PollController {
     @PostMapping("/poll/save")
     public ResponseEntity<PollDTO> savePoll(@RequestBody PollDTO pollDTO, HttpServletRequest request) {
         try {
+            if(!pollService.isPollLengthValid(pollDTO)) {
+                return ResponseEntity.badRequest().build();
+            }
+
             String requestUri = request.getRequestURI();
             PollDTO savedPoll = pollService.savePoll(pollDTO);
             URI location = getNewLocationUri(requestUri, savedPoll.getUuid());
