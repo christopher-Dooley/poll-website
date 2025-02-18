@@ -65,12 +65,19 @@ public class PollService {
 
     public VoteDTO saveVote(VoteDTO voteDTO) {
         try {
+            setVoteUuidIfNull(voteDTO);
             updateVoteCount(voteDTO);
             voteRepository.save(DataTransformer.voteDTOToEntity(voteDTO));
             return voteDTO;
         } catch (Exception e) {
             log.error("Saving new vote failed", e);
             throw e;
+        }
+    }
+
+    private void setVoteUuidIfNull(VoteDTO dto) {
+        if (dto.getUuid() == null) {
+            dto.setUuid(UUID.randomUUID());
         }
     }
 
