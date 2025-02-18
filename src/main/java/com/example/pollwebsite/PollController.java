@@ -73,12 +73,26 @@ public class PollController {
         return pollService.getResultsForPollByUUID(uuid);
     }
 
-    @PostMapping("/poll/vote")
+    @PostMapping("/poll/vote/save")
     public VoteDTO saveVote(@RequestBody VoteDTO voteDTO) {
         return pollService.saveVote(voteDTO);
+    }
+
+    @GetMapping("/poll/vote/{pollName}/{voteNumber}")
+    public VoteDTO getVoteForPoll(@PathVariable String pollName, @PathVariable int voteNumber) {
+        return pollService.getVoteForPoll(pollName, voteNumber);
+    }
+
+    @GetMapping("/poll/vote/{uuid}")
+    public VoteDTO getVoteForUUID(@PathVariable UUID uuid) {
+        return pollService.getVoteForUUID(uuid);
     }
 
     @ExceptionHandler(PollNotFoundException.class)
     @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "Poll not found")
     public void handlePollNotFoundException() {}
+
+    @ExceptionHandler(VoteNotFoundException.class)
+    @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "Vote not found")
+    public void handleVoteNotFoundException() {}
 }
