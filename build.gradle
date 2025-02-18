@@ -36,13 +36,18 @@ tasks.register('npmInstall', Exec) {
 	commandLine 'cmd.exe', '/c', 'npm install'
 }
 
+// Clean out old artifacts
+tasks.register('cleanFrontend', Delete) {
+	delete 'src/main/resources/static'
+}
+
 // Task to build the UI
 tasks.register('buildFrontend', Exec) {
 	workingDir frontendProjectDir
 	inputs.dir("${frontendProjectDir}\\src")
 	inputs.dir("${frontendProjectDir}\\node_modules")
 	outputs.dir(frontendDistDir)
-	dependsOn npmInstall
+	dependsOn npmInstall, cleanFrontend
 
 	commandLine 'cmd.exe', '/c', 'npm run build'
 }
