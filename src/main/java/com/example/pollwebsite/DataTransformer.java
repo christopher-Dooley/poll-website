@@ -1,5 +1,10 @@
 package com.example.pollwebsite;
 
+import com.example.pollwebsite.dtos.PollDTO;
+import com.example.pollwebsite.dtos.VoteDTO;
+import com.example.pollwebsite.entities.PollEntity;
+import com.example.pollwebsite.entities.VoteEntity;
+
 public class DataTransformer {
 
     public static PollEntity pollDTOToEntity(PollDTO dto) {

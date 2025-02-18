@@ -1,5 +1,6 @@
-package com.example.pollwebsite;
+package com.example.pollwebsite.repository;
 
+import com.example.pollwebsite.entities.VoteEntity;
 import org.springframework.data.repository.Repository;
 
 import java.util.List;

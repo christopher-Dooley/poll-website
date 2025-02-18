@@ -1,5 +1,10 @@
 package com.example.pollwebsite;
 
+import com.example.pollwebsite.dtos.PollDTO;
+import com.example.pollwebsite.dtos.PollResultDTO;
+import com.example.pollwebsite.dtos.VoteDTO;
+import com.example.pollwebsite.exceptions.PollNotFoundException;
+import com.example.pollwebsite.exceptions.VoteNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

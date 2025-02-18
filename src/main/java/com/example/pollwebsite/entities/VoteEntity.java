@@ -1,4 +1,4 @@
-package com.example.pollwebsite;
+package com.example.pollwebsite.entities;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

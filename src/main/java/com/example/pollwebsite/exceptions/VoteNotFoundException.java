@@ -1,4 +1,4 @@
-package com.example.pollwebsite;
+package com.example.pollwebsite.exceptions;
 
 public class VoteNotFoundException extends RuntimeException {
     public VoteNotFoundException(String message) {

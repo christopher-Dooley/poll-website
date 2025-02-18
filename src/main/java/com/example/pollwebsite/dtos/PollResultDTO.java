@@ -1,4 +1,4 @@
-package com.example.pollwebsite;
+package com.example.pollwebsite.dtos;
 
 import java.util.Map;
 import java.util.Objects;

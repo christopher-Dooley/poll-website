@@ -1,5 +1,14 @@
 package com.example.pollwebsite;
 
+import com.example.pollwebsite.dtos.PollDTO;
+import com.example.pollwebsite.dtos.PollResultDTO;
+import com.example.pollwebsite.dtos.VoteDTO;
+import com.example.pollwebsite.entities.PollEntity;
+import com.example.pollwebsite.entities.VoteEntity;
+import com.example.pollwebsite.exceptions.PollNotFoundException;
+import com.example.pollwebsite.exceptions.VoteNotFoundException;
+import com.example.pollwebsite.repository.PollRepository;
+import com.example.pollwebsite.repository.VoteRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

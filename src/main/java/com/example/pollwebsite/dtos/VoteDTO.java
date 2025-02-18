@@ -1,4 +1,4 @@
-package com.example.pollwebsite;
+package com.example.pollwebsite.dtos;
 
 import java.time.ZonedDateTime;
 import java.util.Objects;
