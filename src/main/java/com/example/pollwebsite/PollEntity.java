@@ -1,7 +1,9 @@
 package com.example.pollwebsite;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.UniqueConstraint;
 
 import java.util.Collection;
 import java.util.Objects;
@@ -12,6 +14,7 @@ public class PollEntity {
 
     @Id
     private UUID uuid;
+    @Column(unique = true)
     private String name;
     private String question;
     private Collection<String> options;
