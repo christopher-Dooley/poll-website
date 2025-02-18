@@ -10,10 +10,10 @@ const props = defineProps({
 
 const chosen = ref(false)
 
-const emit = defineEmits(['weapon'])
+const emit = defineEmits(['choice'])
 
 function chooseOption(text) {
-    emit("weapon", text)
+    emit("choice", text)
     chosen.value = true
 }
 
