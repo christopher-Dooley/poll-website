@@ -1,60 +1,91 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 
 import PollOption from './components/PollOption.vue';
 
-let weaps = ["mace", "flail", "sword", "warhammer"]
-const chosen = ref('')
+const chosen = ref(null)
 const poll = ref(null)
 const pollResults = ref(null)
-
 
 async function fetchPoll() {
   poll.value = null
 
-  const response = await fetch('http://localhost:3000/poll/current')
-  const data = await response.json()
-
-  poll.value = data
-}
-
-async function submitVote() {
-
+  try {
+    const response = await fetch('http://localhost:3000/poll/current')
+    const data = await response.json()
+    poll.value = data
+  } catch (error) {
+    console.error('Error fetching poll:', error)
+  }
 }
 
 async function fetchPollResults() {
   pollResults.value = null
 
-  const response = await fetch('http://localhost:3000/poll/results', {mode: 'no-cors'})
-  const data = await response.json()
-
-  pollResults.value = data
+  try {
+    const response = await fetch('http://localhost:3000/poll/current/results')
+    const data = await response.json()
+    pollResults.value = data
+    console.log(data)
+  } catch (error) {
+    console.error('Error fetching poll results:', error)
+  }
 }
+
+async function submitVote(choice) {
+  try {
+    await fetch('http://localhost:3000/poll/vote/save', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        pollName: poll.value.name,
+        option: choice,
+        timestamp: getZonedDateTimeString()
+      })
+    })
+  } catch (error) {
+    console.error('Error submitting vote:', error)
+  }
+}
+
+function getZonedDateTimeString(date = new Date()) {
+  const offset = date.getTimezoneOffset(); 
+  const sign = offset >= 0 ? "+" : "-";
+  const pad = (n) => String(Math.floor(Math.abs(n))).padStart(2, "0");
+
+  const hours = pad(offset / 60); 
+  const minutes = pad(offset % 60); 
+
+  const zone = "[" + Intl.DateTimeFormat().resolvedOptions().timeZone + "]"
+
+  return date.toISOString().replace("Z", `${sign}${hours}:${minutes}`) + zone;
+}
+
+watch(chosen, async (newChoice) => {
+  if (newChoice) {
+    await submitVote(newChoice)
+    fetchPollResults()
+  }
+})
 
 fetchPoll()
 </script>
 
 <template>
-  <h1>Poll</h1>
-
   <p v-if="!poll">Fetching poll details</p>
-  <p v-else-if="poll">Poll: {{ poll.value }}</p>
 
-
-  <!-- <div>
-    
-    <h1>What's your favourite  weapon?</h1>
-
-    <p>Chosen:</p>
-    <p>{{ chosen }}</p>
+  <div class="container" v-else>
+    <h1>{{ poll.name }}</h1>
+    <h1>{{ poll.question }}</h1>
 
     <ul>
-      <li v-for="weap in weaps">
-        <PollOption @weapon="(msg) => chosen = msg" :text="weap" :enabled="!chosen" :totalVotes=10 :chosenVotes=2 :key="weap"></PollOption>
+      <li v-for="choice in poll.options">
+        <PollOption @choice="(msg) => chosen = msg" :text="choice" :enabled="!chosen" :totalVotes="pollResults?.totalVotes || 0" :chosenVotes="pollResults?.results[choice] || 0" ></PollOption>
       </li>
     </ul>
-  </div> -->
-
+  </div>  
 
 </template>
 

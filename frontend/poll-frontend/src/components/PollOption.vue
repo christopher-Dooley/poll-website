@@ -40,7 +40,7 @@ const buttonClass = computed(() => {
 .option {
     position: relative;
     width: 100%;
-    height: 60px;
+    height: 80px;
     border: 1px solid #ccc;
     overflow: hidden;
     background-color: #f9f9f9;
@@ -48,7 +48,7 @@ const buttonClass = computed(() => {
 
 .option.chosen {
     border-color: #ff9800;
-    border-width: thick;
+    border-width: medium;
 }
 
 .fill {
