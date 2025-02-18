@@ -78,12 +78,12 @@ public class PollController {
         return pollService.saveVote(voteDTO);
     }
 
-    @GetMapping("/poll/vote/{pollName}/{voteNumber}")
+    @GetMapping("/poll/vote/name/{pollName}/number/{voteNumber}")
     public VoteDTO getVoteForPoll(@PathVariable String pollName, @PathVariable int voteNumber) {
         return pollService.getVoteForPoll(pollName, voteNumber);
     }
 
-    @GetMapping("/poll/vote/{uuid}")
+    @GetMapping("/poll/vote/uuid/{uuid}")
     public VoteDTO getVoteForUUID(@PathVariable UUID uuid) {
         return pollService.getVoteForUUID(uuid);
     }
