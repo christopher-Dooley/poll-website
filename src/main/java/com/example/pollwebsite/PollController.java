@@ -3,6 +3,7 @@ package com.example.pollwebsite;
 import com.example.pollwebsite.dtos.PollDTO;
 import com.example.pollwebsite.dtos.PollResultDTO;
 import com.example.pollwebsite.dtos.VoteDTO;
+import com.example.pollwebsite.exceptions.OptionNotFoundException;
 import com.example.pollwebsite.exceptions.PollNotFoundException;
 import com.example.pollwebsite.exceptions.VoteNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -100,4 +101,8 @@ public class PollController {
     @ExceptionHandler(VoteNotFoundException.class)
     @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "Vote not found")
     public void handleVoteNotFoundException() {}
+
+    @ExceptionHandler(OptionNotFoundException.class)
+    @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "Option not found")
+    public void handleOptionNotFoundException() {}
 }

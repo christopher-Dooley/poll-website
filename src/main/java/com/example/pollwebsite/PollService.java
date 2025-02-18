@@ -5,6 +5,7 @@ import com.example.pollwebsite.dtos.PollResultDTO;
 import com.example.pollwebsite.dtos.VoteDTO;
 import com.example.pollwebsite.entities.PollEntity;
 import com.example.pollwebsite.entities.VoteEntity;
+import com.example.pollwebsite.exceptions.OptionNotFoundException;
 import com.example.pollwebsite.exceptions.PollNotFoundException;
 import com.example.pollwebsite.exceptions.VoteNotFoundException;
 import com.example.pollwebsite.repository.PollRepository;
@@ -74,13 +75,23 @@ public class PollService {
 
     public VoteDTO saveVote(VoteDTO voteDTO) {
         try {
+            String pollName = voteDTO.getPollName();
+            PollEntity poll = getPollEntityByName(pollName);
+            checkOptionExists(poll, voteDTO.getOption());
             setVoteUuidIfNull(voteDTO);
-            updateVoteCount(voteDTO);
+            updateVoteCount(voteDTO, poll);
             voteRepository.save(DataTransformer.voteDTOToEntity(voteDTO));
             return voteDTO;
         } catch (Exception e) {
             log.error("Saving new vote failed", e);
             throw e;
+        }
+    }
+
+    private void checkOptionExists(PollEntity poll, String option) {
+        if (!poll.getOptions().contains(option)) {
+            String message = String.format("Option %s does not exist in poll %s", option, poll.getName());
+            throw new OptionNotFoundException(message);
         }
     }
 
@@ -90,14 +101,7 @@ public class PollService {
         }
     }
 
-    private void updateVoteCount(VoteDTO voteDTO) {
-        String pollName = voteDTO.getPollName();
-        PollEntity poll = pollRepository.findByName(pollName).orElseThrow(() -> {
-            String message = String.format("Poll %s not found", pollName);
-            log.error(message);
-            return new PollNotFoundException(message);
-        });
-
+    private void updateVoteCount(VoteDTO voteDTO, PollEntity poll) {
         int newNumberOfVotes = poll.getNumberOfVotes() + 1;
         poll.setNumberOfVotes(newNumberOfVotes);
         voteDTO.setVoteNumber(newNumberOfVotes);
@@ -134,6 +138,14 @@ public class PollService {
         });
 
         return createPollResultDTO(poll);
+    }
+
+    private PollEntity getPollEntityByName(String pollName) {
+        return pollRepository.findByName(pollName).orElseThrow(() -> {
+            String message = String.format("Poll %s not found", pollName);
+            log.error(message);
+            return new PollNotFoundException(message);
+        });
     }
 
     public PollResultDTO getResultsForPoll(String pollName) {
