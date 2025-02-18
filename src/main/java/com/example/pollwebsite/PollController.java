@@ -63,7 +63,7 @@ public class PollController {
         );
     }
 
-    @GetMapping("/poll/results")
+    @GetMapping("/poll/current/results")
     public PollResultDTO getResultsForCurrentPoll() {
         return pollService.getResultsForCurrentPoll();
     }
