@@ -31,6 +31,17 @@ bootJar {
 def frontendProjectDir = file("frontend\\poll-frontend")
 def frontendDistDir = file("frontend\\poll-frontend\\dist")
 
+// Task to run frontend tests
+tasks.register('testFrontend', Exec) {
+	group = "verification"
+	workingDir frontendProjectDir
+
+	commandLine 'cmd.exe', '/c', 'npm run test'
+}
+
+// Include frontend tests in check
+check.dependsOn testFrontend
+
 // Task to run npm install
 tasks.register('npmInstall', Exec) {
 	workingDir frontendProjectDir
@@ -42,11 +53,13 @@ tasks.register('npmInstall', Exec) {
 
 // Clean out old artifacts
 tasks.register('cleanFrontend', Delete) {
+	group = "build"
 	delete 'src/main/resources/static'
 }
 
 // Task to build the UI
 tasks.register('buildFrontend', Exec) {
+	group = "build"
 	workingDir frontendProjectDir
 	inputs.dir("${frontendProjectDir}\\src")
 	inputs.dir("${frontendProjectDir}\\node_modules")
@@ -58,6 +71,7 @@ tasks.register('buildFrontend', Exec) {
 
 // Task to copy UI build artifacts to resources
 tasks.register('copyFrontendBuild', Copy) {
+	group = "build"
 	dependsOn buildFrontend
 	from frontendDistDir
 	into "src\\main\\resources\\static"
